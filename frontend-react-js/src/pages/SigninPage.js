@@ -13,11 +13,12 @@ export default function SigninPage() {
 
   const [cognitoErrors, setCognitoErrors] = React.useState('');
 
+
   const onsubmit = async (event) => {
     setCognitoErrors('')
     event.preventDefault();
     try {
-      Auth.signIn(email, password)
+      Auth.signIn(username, password)
         .then(user => {
           localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken)
           window.location.href = "/"
@@ -39,10 +40,13 @@ export default function SigninPage() {
     setPassword(event.target.value);
   }
 
-  let el_errors;
-  if (errors){
-    el_errors = <div className='errors'>{errors}</div>;
+  let errors;
+  if (cognitoErrors){
+    errors = <div className='errors'>{cognitoErrors}</div>;
   }
+  
+  // just before submit component
+  {errors}
 
   return (
     <article className="signin-article">
