@@ -32,6 +32,7 @@ export default function SigninPage() {
     }
     return false
   }
+  
 
   const email_onchange = (event) => {
     setEmail(event.target.value);
@@ -44,9 +45,6 @@ export default function SigninPage() {
   if (cognitoErrors){
     errors = <div className='errors'>{cognitoErrors}</div>;
   }
-  
-  // just before submit component
-  {errors}
 
   return (
     <article className="signin-article">
@@ -77,7 +75,7 @@ export default function SigninPage() {
               />
             </div>
           </div>
-          {el_errors}
+          {errors}
           <div className='submit'>
             <Link to="/forgot" className="forgot-link">Forgot Password?</Link>
             <button type='submit'>Sign In</button>
