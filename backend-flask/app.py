@@ -27,8 +27,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 #from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
 # Rollbar -----
-import rollbar
-import rollbar.contrib.flask
+#import rollbar
+#import rollbar.contrib.flask
 from flask import got_request_exception
 
 #HoneyComb -------------
@@ -36,9 +36,9 @@ from flask import got_request_exception
 provider = TracerProvider()
 processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(processor)
+#provider.add_span_processor(simple_processor)
 #Show this in the logs within the backend-flask app (STDOUT)
-simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
-provider.add_span_processor(simple_processor)
+#simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
@@ -50,12 +50,13 @@ from time import strftime
 app = Flask(__name__)
 
 # Configuring Logger to Use CloudWatch
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
-console_handler = logging.StreamHandler()
-cw_handler = watchtower.CloudWatchLogHandler(log_group='cruddur')
-LOGGER.addHandler(console_handler)
-LOGGER.addHandler(cw_handler)
+#LOGGER = logging.getLogger(__name__)
+#LOGGER.setLevel(logging.DEBUG)
+#console_handler = logging.StreamHandler()
+#cw_handler = watchtower.CloudWatchLogHandler(log_group='backend-flask')
+#LOGGER.addHandler(console_handler)
+#LOGGER.addHandler(cw_handler)
+#LOGGER.info("Test Log")
 
 #HoneyComb ...........
 # Initialize automatic instrumentation with Flask
@@ -78,11 +79,12 @@ cors = CORS(
   methods="OPTIONS,GET,HEAD,POST"
 )
 
-@app.after_request
-def after_request(response):
-    timestamp = strftime('[%Y-%b-%d %H:%M]')
-    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
-    return response
+# This is for CloudWatch Logs
+#@app.after_request
+#def after_request(response):
+#    timestamp = strftime('[%Y-%b-%d %H:%M]')
+#    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+#    return response
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
