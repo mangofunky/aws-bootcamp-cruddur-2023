@@ -2,6 +2,7 @@ import './SigninPage.css';
 import React from "react";
 import {ReactComponent as Logo} from '../components/svg/logo.svg';
 import { Link } from "react-router-dom";
+import { Auth } from 'aws-amplify';
 
 // [TODO] Authenication
 import Cookies from 'js-cookie'
@@ -11,6 +12,7 @@ export default function SigninPage() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState('');
+  const [cognitoErrors, setCognitoErrors] = React.useState('');
 
   const onsubmit = async (event) => {
     event.preventDefault();
