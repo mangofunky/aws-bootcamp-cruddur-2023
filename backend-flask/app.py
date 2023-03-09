@@ -13,6 +13,7 @@ from services.message_groups import *
 from services.messages import *
 from services.create_message import *
 from services.show_activity import *
+from lib.cognito_jwt_token import CognitoJwtToken
 
 #HoneyComb -------------
 from opentelemetry import trace
@@ -49,6 +50,12 @@ import os
 import rollbar
 import rollbar.contrib.flask
 from flask import got_request_exception
+
+# cognito_jwt_token = CognitoJwtToken(
+#   user_pool_id= os.getenv("AWS_COGNITO_USER_POOL_ID"), 
+#   user_pool_client_id= os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"), 
+#   region= os.getenv("AWS_DEFAULT_REGION")
+# )
 
 app = Flask(__name__)
 
