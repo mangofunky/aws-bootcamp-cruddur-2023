@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 // [TODO] Authenication
 import { Auth } from 'aws-amplify';
 
-
 export default function SignupPage() {
 
   // Username is Eamil

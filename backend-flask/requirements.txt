@@ -13,4 +13,4 @@ watchtower
 
 blinker
 rollbar
-python-jose
+Flask-AWSCognito
