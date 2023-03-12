@@ -16,10 +16,6 @@ else
   URL=$CONNECTION_URL
 fi
 
-URL=$CONNECTION_URL
-URL=$(sed 's/\/cruddur//g' <<<"$CONNECTION_URL")
 psql $URL cruddur < $schema_path
 
-
-#psql $URL cruddur < db/schema.sql
 
