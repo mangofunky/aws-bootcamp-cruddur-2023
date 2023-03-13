@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS public.activities;
 CREATE TABLE public.users (
   uuid UUID default uuid_generate_v4() primary key,
   display_name text,
+  email text,
   handle text,
   cognito_user_id text,
   created_at timestamp default current_timestamp NOT NULL
