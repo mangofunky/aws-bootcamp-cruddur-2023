@@ -13,13 +13,13 @@ def lambda_handler(event, context):
     user_cognito_id     = user['sub']
     try:
         sql = f"""
-        "INSERT INTO public.users (
+        INSERT INTO public.users (
             display_name,
             email, 
             handle, 
             cognito_user_id
             )
-        VALUES(%s,%s,%s,%s)"
+        VALUES(%s,%s,%s,%s)
         """
         print('SQL Statement------')
         print(sql)
