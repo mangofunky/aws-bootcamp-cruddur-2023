@@ -9,6 +9,7 @@ source "$bin_path/db/drop"
 source "$bin_path/db/create"
 source "$bin_path/db/schema-load"
 source "$bin_path/db/seed"
+source "$bin_path/db/update_cognito_user_ids"
 
 CYAN='\033[1;35m'
 NO_COLOR='\033[0m'
