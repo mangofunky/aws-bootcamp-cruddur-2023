@@ -3,6 +3,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 import uuid
 import os
+import botocore.exceptions
 
 class Ddb:
   def client():
@@ -14,7 +15,7 @@ class Ddb:
     dynamodb = boto3.client('dynamodb', **attrs)
     return dynamodb
 
-  def list_message_groups(client, my_user_uuid):
+  def list_message_groups(client,my_user_uuid):
     table_name = 'cruddur-messages'
     query_params = {
         'TableName': table_name,
@@ -25,14 +26,14 @@ class Ddb:
             ':pk': {'S': f"GRP#{my_user_uuid}"}
         }
     }
-    print('query-params')
+    print('query-params:',query_params)
     print(query_params)
-    print('client')
-    print(client)
 
     # query the table
     response = client.query(**query_params)
     items = response['Items']
+
+    print("items::", items)
 
     results = []
     for item in items:
