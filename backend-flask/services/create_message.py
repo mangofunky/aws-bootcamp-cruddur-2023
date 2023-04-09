@@ -40,7 +40,7 @@ class CreateMessage:
         rev_handle = ''
       else:
         rev_handle = user_receiver_handle
-      users = db.query_array_json(sql, {
+      users = db.query_array_json(sql,{
           'cognito_user_id': cognito_user_id,
           'user_receiver_handle': rev_handle
       })
