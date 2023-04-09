@@ -229,7 +229,7 @@ for i in range(len(lines)):
     else:
         print(lines[i])
         raise 'nvalid line'
-    created_at = (now + timedelta(minutes=i)).isoformat()
+    created_at = (now + timedelta(hours=-3) + timedelta(minutes=minute)).isoformat()
     create_message(
         client=ddb,
         message_group_uuid=message_group_uuid,

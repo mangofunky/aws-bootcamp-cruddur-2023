@@ -19,6 +19,7 @@ table_name = 'cruddur-messages'
 message_group_uuid = "5ae290ed-55d1-47a0-bc6d-fe2bc2700399"
 
 # define the query parameters
+year = datetime.now().year
 query_params = {
   'TableName': table_name,
   'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
@@ -26,7 +27,7 @@ query_params = {
   'ScanIndexForward': True,
   'Limit': 20,
   'ExpressionAttributeValues': {
-    ':year': {'S': '2023'},
+      ':year': {'S': str(year)},
   #  ':start_date': {"S": "2023-03-26T15:59:44.877287+00:00"},
   #  ':end_date': {"S": "2023-03-26T16:00:44.877287+00:00"},
     ':pk': {'S': f"MSG#{message_group_uuid}"}
