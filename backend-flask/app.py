@@ -174,9 +174,6 @@ def data_messages(message_group_uuid):
 @app.route("/api/messages", methods=['POST', 'OPTIONS'])
 @cross_origin()
 def data_create_message():
-  message_group_uuid = request.json.get('message_group_uuid', None)
-  user_receiver_handle = request.json.get('handle', None)
-  message = request.json['message']
   access_token = extract_access_token(request.headers)
   try:
     claims = cognito_jwt_token.verify(access_token)
@@ -184,22 +181,27 @@ def data_create_message():
     app.logger.debug("authenicated")
     app.logger.debug(claims)
     cognito_user_id = claims['sub']
+    message_group_uuid = request.json.get('message_group_uuid', None)
+    user_receiver_handle = request.json.get('handle', None)
+    message = request.json['message']
+    
     if message_group_uuid == None:
-      # Create for the first time
+          # Create for the first time
       model = CreateMessage.run(
-          mode="create",
-          message=message,
-          cognito_user_id=cognito_user_id,
-          user_receiver_handle=user_receiver_handle
+        mode="create",
+        message=message,
+        cognito_user_id=cognito_user_id,
+        user_receiver_handle=user_receiver_handle
       )
     else:
       # Push onto existing Message Group
       model = CreateMessage.run(
-          mode="update",
-          message=message,
-          message_group_uuid=message_group_uuid,
-          cognito_user_id=cognito_user_id
+        mode="update",
+        message=message,
+        message_group_uuid=message_group_uuid,
+        cognito_user_id=cognito_user_id
       )
+
     if model['errors'] is not None:
       return model['errors'], 422
     else:
@@ -207,6 +209,7 @@ def data_create_message():
   except TokenVerifyError as e:
     # unauthenicatied request
     app.logger.debug(e)
+    app.logger.debug("unauthenicated")
     return {}, 401
 
 @app.route("/api/activities/home", methods=['GET'])
@@ -277,7 +280,7 @@ def data_activities_reply(activity_uuid):
     return model['data'], 200
   return
 
-@app.route("/api/users/<string:handle>/short", methods=['GET'])
+@app.route("/api/users/@<string:handle>/short", methods=['GET'])
 def data_users_short(handle):
   data = UsersShort.run(handle)
   return data, 200
