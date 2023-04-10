@@ -3,6 +3,7 @@ import React from "react";
 
 import DesktopNavigation  from '../components/DesktopNavigation';
 import MessageGroupFeed from '../components/MessageGroupFeed';
+
 import checkAuth from '../lib/CheckAuth';
 
 export default function MessageGroupsPage() {
@@ -16,8 +17,8 @@ export default function MessageGroupsPage() {
       const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/message_groups`
       const res = await fetch(backend_url, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`
-        }, 
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        },
         method: "GET"
       });
       let resJson = await res.json();
