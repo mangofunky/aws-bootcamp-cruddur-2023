@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from lib.db import db
 import boto3
 import os
 import sys
@@ -10,6 +9,8 @@ import uuid
 current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(current_path, '..', '..'))
 sys.path.append(parent_path)
+
+from lib.db import db
 
 attrs = {
     'endpoint_url': 'http://localhost:8000'
@@ -35,11 +36,11 @@ def get_user_uuids():
         )
   """
     users = db.query_array_json(sql, {
-        'my_handle':  'beiciliang',
+        'my_handle':  'mangofunky',
         'other_handle': 'bayko'
     })
     my_user = next(
-        (item for item in users if item["handle"] == 'beiciliang'), None)
+        (item for item in users if item["handle"] == 'mangofunky'), None)
     other_user = next(
         (item for item in users if item["handle"] == 'bayko'), None)
     results = {
