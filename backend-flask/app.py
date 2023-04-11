@@ -121,11 +121,15 @@ def init_rollbar():
     # send exceptions from `app` to rollbar, using flask's signal system.
     got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
-# Rollbar endpoint
-@app.route('/rollbar/test')
-def rollbar_test():
-    rollbar.report_message('Hello World! WOW', 'warning')
-    return "Hello World! WOW!!"
+@app.route('/api/health-check')
+def health_check():
+  return {'success': True}, 200
+
+# # Rollbar endpoint
+# @app.route('/rollbar/test')
+# def rollbar_test():
+#     rollbar.report_message('Hello World! WOW', 'warning')
+#     return "Hello World! WOW!!"
 
 
 @app.route("/api/message_groups", methods=['GET'])
