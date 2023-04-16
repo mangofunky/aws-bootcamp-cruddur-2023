@@ -131,7 +131,6 @@ def health_check():
 #     rollbar.report_message('Hello World! WOW', 'warning')
 #     return "Hello World! WOW!!"
 
-
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
   access_token = extract_access_token(request.headers)
