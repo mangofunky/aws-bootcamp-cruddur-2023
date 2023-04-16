@@ -1,4 +1,3 @@
-
 {
     "cluster": "cruddur",
     "launchType": "FARGATE",
