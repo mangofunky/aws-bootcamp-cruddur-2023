@@ -2,8 +2,8 @@ version: "3.8"
 services:
   backend-flask:
     environment:
-      CONNECTION_URL: "${PROD_CONNECTION_URL}"
-      #CONNECTION_URL: "postgresql://postgres:password@db:5432/cruddur"
+      #CONNECTION_URL: "${PROD_CONNECTION_URL}"
+      CONNECTION_URL: "postgresql://postgres:password@db:5432/cruddur"
       PROD_CONNECTION_URL: "${PROD_CONNECTION_URL}"
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
@@ -20,7 +20,7 @@ services:
       ROLLBAR_ACCESS_TOKEN: "d549775c888b4406b00dbf1719162570"
       AWS_COGNITO_USER_POOL_ID: "${AWS_COGNITO_USER_POOL_ID}"
       AWS_COGNITO_USER_POOL_CLIENT_ID: "1nr4ihq5fodh893m68t2evmkfu"
-      #AWS_ENDPOINT_URL: "http://dynamodb-local:8000"
+      AWS_ENDPOINT_URL: "http://dynamodb-local:8000"
       #AWS_ENDPOINT_URL: "http://dynamodb.us-west-1.amazonaws.com"
 
     build: ./backend-flask
