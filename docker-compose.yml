@@ -21,7 +21,7 @@ services:
       AWS_COGNITO_USER_POOL_ID: "${AWS_COGNITO_USER_POOL_ID}"
       AWS_COGNITO_USER_POOL_CLIENT_ID: "1nr4ihq5fodh893m68t2evmkfu"
       #AWS_ENDPOINT_URL: "http://dynamodb-local:8000"
-      AWS_ENDPOINT_URL: "http://dynamodb.us-west-1.amazonaws.com"
+      AWS_ENDPOINT_URL: "http://dynamodb.us-east-1.amazonaws.com"
 
     build: ./backend-flask
     ports:
