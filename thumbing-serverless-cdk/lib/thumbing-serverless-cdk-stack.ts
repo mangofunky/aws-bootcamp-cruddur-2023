@@ -1,13 +1,12 @@
 import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { Lambda } from 'aws-cdk-lib/aws-ses-actions';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
+import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as sns from 'aws-cdk-lib/aws-sns';
 import { Construct } from 'constructs';
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import * as dotenv from 'dotenv';
-
 //Load env variables
 dotenv.config();
 
@@ -22,8 +21,7 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     const webhookUrl: string = process.env.THUMBING_WEBHOOK_URL as string;
     const topicName: string = process.env.THUMBING_TOPIC_NAME as string;
     const functionPath: string = process.env.THUMBING_FUNCTION_PATH as string;
-    const width: string = process.env.PROCESS_WIDTH as string;
-    const height: string = process.env.PROCESS_HEIGTH as string;
+
     console.log('bucketName',bucketName)
     console.log('folderInput',folderInput)
     console.log('folderOutput',folderOutput)
@@ -40,7 +38,7 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
 
   } 
     createBucket(bucketName: string): s3.IBucket {
-      const bucket = new s3.Bucket(this, 'AssetsBucket', {
+      const bucket = new s3.Bucket(this, 'ThumbingBucket', {
       bucketName: bucketName,
       removalPolicy: cdk.RemovalPolicy.DESTROY
       });
@@ -48,7 +46,7 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     }
 
     importBucket(bucketName: string): s3.IBucket {
-      const bucket = s3.Bucket.fromBucketName(this,'AssetsBucket',bucketName);
+      const bucket = s3.Bucket.fromBucketName(this,'ThumbingBucket',bucketName);
       return bucket;
     }
 
@@ -63,8 +61,8 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
           DEST_BUCKET_NAME: bucketName,
           FOLDER_INPUT: folderInput,
           FOLDER_OUTPUT: folderOutput,
-          PROCESS_WIDTH: "512",
-          PROCESS_HEIGHT: "512"
+          PROCESS_WIDTH: '512',
+          PROCESS_HEIGHT: '512'
         }
       });
       return lambdaFunction;
@@ -73,7 +71,7 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
       const destination = new s3n.LambdaDestination(lambda);
         bucket.addEventNotification(
         s3.EventType.OBJECT_CREATED_PUT,
-        destination
+        destination,
         //{prefix: prefix} //folder to contain the original images
       )
     }
