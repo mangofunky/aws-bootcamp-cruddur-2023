@@ -23,22 +23,16 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     const topicName: string = process.env.THUMBING_TOPIC_NAME as string;
     const functionPath: string = process.env.THUMBING_FUNCTION_PATH as string;
 
-    // console.log('bucketName',bucketName)
-    // console.log('folderInput',folderInput)
-    // console.log('folderOutput',folderOutput)
-    // console.log('webhookUrl',webhookUrl)
-    // console.log('topicName',topicName)
-    // console.log('functionPath',functionPath)
-
-    //const bucket = this.createBucket(bucketName);
-    //const bucket = this.importBucket(bucketName);
+    console.log('uploadsBucketName',uploadsBucketName)
+    console.log('assetsBucketName', assetsBucketName)
+    console.log('folderInput',folderInput)
+    console.log('folderOutput',folderOutput)
+    console.log('webhookUrl',webhookUrl)
+    console.log('topicName',topicName)
+    console.log('functionPath',functionPath)
     
     const uploadsBucket = this.createBucket(uploadsBucketName);
     const assetsBucket = this.importBucket(assetsBucketName);
-    
-    //s3 read and write IAM policies
-    const s3UploadsReadWritePolicy = this.createPolicyBucketAccess(uploadsBucket.bucketArn);
-    const s3AssetsReadWritePolicy = this.createPolicyBucketAccess(assetsBucket.bucketArn);
     
     //create a lambda
     const lambda = this.createLambda(
@@ -54,14 +48,16 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     this.createS3NotifyToLambda(folderInput,lambda,uploadsBucket);
     this.createS3NotifyToSns(folderOutput,snsTopic,assetsBucket);
     
+    // creates SNS topic, subscription
+    this.createSnsSubscription(snsTopic,webhookUrl);    
+   
+    //s3 read and write IAM policies
+    const s3UploadsReadWritePolicy = this.createPolicyBucketAccess(uploadsBucket.bucketArn);
+    const s3AssetsReadWritePolicy = this.createPolicyBucketAccess(assetsBucket.bucketArn);
+
     //attach policies to Lambda for permissions
     lambda.addToRolePolicy(s3UploadsReadWritePolicy);
     lambda.addToRolePolicy(s3AssetsReadWritePolicy);
-    
-    // creates SNS topic, subscription
-    this.createSnsSubscription(snsTopic,webhookUrl);
-        
-
 
   } 
     createBucket(bucketName: string): s3.IBucket {
