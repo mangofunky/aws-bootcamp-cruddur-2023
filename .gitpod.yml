@@ -15,6 +15,7 @@ tasks:
       npm i
   - name: fargate
     before: |
+      cd /workspace
       curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
       sudo dpkg -i session-manager-plugin.deb
       cd backend-flask
@@ -29,6 +30,9 @@ tasks:
       cd thumbing-serverless-cdk
       cp .env.example .env
       npm i
+  - name: sharp
+    command: |
+      source  "$THEIA_WORKSPACE_ROOT/bin/avatar/sharp"
   - name: postgres
     before: |
       curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg

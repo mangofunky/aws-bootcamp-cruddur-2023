@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ABS_PATH=$(readlink -f "$0")
+AVATAR_PATH=$(dirname $ABS_PATH)
+BIN_PATH=$(dirname $AVATAR_PATH)
+PROJECT_PATH=$(dirname $BIN_PATH)
+cd $PROJECT_PATH/aws/lambdas/process-images
+
+# Install dependencies
+npm install
+
+# Remove the sharp directory
+rm -rf node_modules/sharp
+
+# Install sharp with specific arch, platform, and libc flags
+SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp

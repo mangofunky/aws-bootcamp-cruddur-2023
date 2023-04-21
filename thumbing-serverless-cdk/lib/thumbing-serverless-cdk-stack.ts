@@ -1,6 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
-import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Lambda } from 'aws-cdk-lib/aws-ses-actions';
 import { Construct } from 'constructs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
@@ -29,29 +31,62 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     console.log('topicName',topicName)
     console.log('functionPath',functionPath)
 
-    const bucket = this.createBucket(bucketName);
-    const lambda = this.createLambda(functionPath, bucketName, folderInput, folderOutput, width, height);
+    //const bucket = this.createBucket(bucketName);
+    const bucket = this.importBucket(bucketName);
+    const lambda = this.createLambda(functionPath, bucketName, folderInput, folderOutput);
+    this.createS3NotifyToLambda(folderInput,lambda,bucket);
+    const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn);
+    lambda.addToRolePolicy(s3ReadWritePolicy);
+
   } 
     createBucket(bucketName: string): s3.IBucket {
-      const bucket = new s3.Bucket(this, 'ThumbingBucket', {
+      const bucket = new s3.Bucket(this, 'AssetsBucket', {
       bucketName: bucketName,
       removalPolicy: cdk.RemovalPolicy.DESTROY
       });
       return bucket;
     }
-    createLambda(functionPath: string, bucketName: string, folderInput: string, folderOutput: string, width: string, height: string ): lambda.IFunction {
-      const lambdaFunction = new lambda.Function(this, 'ThumbLambda', {
-        code: lambda.Code.fromAsset(functionPath),
-        handler: 'index.handler',
+
+    importBucket(bucketName: string): s3.IBucket {
+      const bucket = s3.Bucket.fromBucketName(this,'AssetsBucket',bucketName);
+      return bucket;
+    }
+
+    createLambda(functionPath: string, bucketName: string, folderInput: string, folderOutput: string ): lambda.IFunction {
+      const logicalName = 'ThumbLambda';
+      const code = lambda.Code.fromAsset(functionPath)    
+      const lambdaFunction = new lambda.Function(this, logicalName, {
         runtime: lambda.Runtime.NODEJS_18_X,
+        handler: 'index.handler',
+        code: code,
         environment: {
           DEST_BUCKET_NAME: bucketName,
           FOLDER_INPUT: folderInput,
           FOLDER_OUTPUT: folderOutput,
-          PROCESS_WIDTH: width,
-          PROCESS_HEIGTH: height
+          PROCESS_WIDTH: '512',
+          PROCESS_HEIGTH: '512'
         }
       });
       return lambdaFunction;
     }
-  }
+    createS3NotifyToLambda(prefix: string, lambda: lambda.IFunction, bucket: s3.IBucket): void {
+      const destination = new s3n.LambdaDestination(lambda);
+        bucket.addEventNotification(
+        s3.EventType.OBJECT_CREATED_PUT,
+        destination
+        //{prefix: prefix} //folder to contain the original images
+      )
+    }
+    createPolicyBucketAccess(bucketArn: string){
+      const s3ReadWritePolicy = new iam.PolicyStatement({
+        actions: [
+          's3:GetObject',
+          's3:PutObject',
+        ],
+        resources: [
+          `${bucketArn}/*`,
+        ]
+      });
+      return s3ReadWritePolicy;
+    }
+}
