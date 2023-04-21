@@ -4,7 +4,7 @@ ABS_PATH=$(readlink -f "$0")
 AVATAR_PATH=$(dirname $ABS_PATH)
 BIN_PATH=$(dirname $AVATAR_PATH)
 PROJECT_PATH=$(dirname $BIN_PATH)
-cd $PROJECT_PATH/aws/lambdas/process-images/
+cd /workspace/aws-bootcamp-cruddur-2023/aws/lambdas/process-images/
 
 # Install dependencies
 npm install sharp
