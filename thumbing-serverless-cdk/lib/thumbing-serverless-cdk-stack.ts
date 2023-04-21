@@ -45,11 +45,11 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
     
     //create policies
     const s3ReadWritePolicy = this.createPolicyBucketAccess(bucket.bucketArn);
-    const snsPublishPolicy = this.createPolicySnSPublish(snsTopic.topicArn);
+    //const snsPublishPolicy = this.createPolicySnSPublish(snsTopic.topicArn);
     
     //attach policies for permissions
     lambda.addToRolePolicy(s3ReadWritePolicy);
-    lambda.addToRolePolicy(snsPublishPolicy);
+    //lambda.addToRolePolicy(snsPublishPolicy);
 
   } 
     createBucket(bucketName: string): s3.IBucket {
