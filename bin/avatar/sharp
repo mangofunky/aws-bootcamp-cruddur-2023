@@ -7,7 +7,7 @@ PROJECT_PATH=$(dirname $BIN_PATH)
 cd $PROJECT_PATH/aws/lambdas/process-images
 
 # Install dependencies
-npm install
+npm install sharp
 
 # Remove the sharp directory
 rm -rf node_modules/sharp

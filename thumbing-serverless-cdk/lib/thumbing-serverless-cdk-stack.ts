@@ -63,8 +63,8 @@ export class ThumbingServerlessCdkStack extends cdk.Stack {
           DEST_BUCKET_NAME: bucketName,
           FOLDER_INPUT: folderInput,
           FOLDER_OUTPUT: folderOutput,
-          PROCESS_WIDTH: '512',
-          PROCESS_HEIGTH: '512'
+          PROCESS_WIDTH: "512",
+          PROCESS_HEIGTH: "512"
         }
       });
       return lambdaFunction;
