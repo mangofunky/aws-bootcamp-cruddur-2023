@@ -16,12 +16,16 @@ export default function UserFeedPage() {
   const dataFetchedRef = React.useRef(false);
 
   const params = useParams();
-  const title = `@${params.handle}`;
 
   const loadData = async () => {
     try {
-      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/${title}`
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/@${params.handle}`
+      await getAccessToken()
+      const access_token = localStorage.getItem("access_token")
       const res = await fetch(backend_url, {
+        headers: {
+          Authorization: `Bearer ${access_token}`
+        },
         method: "GET"
       });
       let resJson = await res.json();
@@ -51,9 +55,10 @@ export default function UserFeedPage() {
         <ActivityForm popped={popped} setActivities={setActivities} />
           <div className='activity_feed'>
             <div className='activity_feed_heading'>
-              <div className='title'>Title</div>
+              <div className='title'>{profile.display_name}</div>
+              <div class='cruds_count'>{profile.cruds_count} Cruds</div>
             </div>
-             <ActivityFeed title={title} activities={activities} />
+             <ActivityFeed activities={activities} />
           </div>
       </div>
       <DesktopSidebar user={user} />
