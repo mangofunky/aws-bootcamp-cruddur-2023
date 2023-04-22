@@ -6,9 +6,8 @@ import DesktopNavigation  from '../components/DesktopNavigation';
 import DesktopSidebar     from '../components/DesktopSidebar';
 import ActivityFeed from '../components/ActivityFeed';
 import ActivityForm from '../components/ActivityForm';
-
-// [TODO] Authenication
-import Cookies from 'js-cookie'
+import EditProfileButton from '../components/EditProfileButton';
+import {checkAuth, getAccessToken} from '../lib/CheckAuth';
 
 export default function UserFeedPage() {
   const [activities, setActivities] = React.useState([]);
@@ -36,24 +35,13 @@ export default function UserFeedPage() {
     }
   };
 
-  const checkAuth = async () => {
-    console.log('checkAuth')
-    // [TODO] Authenication
-    if (Cookies.get('user.logged_in')) {
-      setUser({
-        display_name: Cookies.get('user.name'),
-        handle: Cookies.get('user.username')
-      })
-    }
-  };
-
   React.useEffect(()=>{
     //prevents double call
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
 
     loadData();
-    checkAuth();
+    checkAuth(setUser);
   }, [])
 
   return (
@@ -61,7 +49,12 @@ export default function UserFeedPage() {
       <DesktopNavigation user={user} active={'profile'} setPopped={setPopped} />
       <div className='content'>
         <ActivityForm popped={popped} setActivities={setActivities} />
-        <ActivityFeed title={title} activities={activities} />
+          <div className='activity_feed'>
+            <div className='activity_feed_heading'>
+              <div className='title'>Title</div>
+            </div>
+             <ActivityFeed title={title} activities={activities} />
+          </div>
       </div>
       <DesktopSidebar user={user} />
     </article>
