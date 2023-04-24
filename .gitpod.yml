@@ -8,11 +8,6 @@ tasks:
       unzip -o awscliv2.zip
       sudo ./aws/install
       cd $THEIA_WORKSPACE_ROOT
-  - name: react-js
-    command: |
-      ruby $THEIA_WORKSPACE_ROOT/bin/frontend/generate-env
-      cd frontend-react-js
-      npm i
   - name: fargate
     before: |
       cd /workspace
@@ -21,18 +16,26 @@ tasks:
       cd backend-flask
   - name: flask
     command: |
-      ruby $THEIA_WORKSPACE_ROOT/bin/backend/generate-env
+      ruby "$THEIA_WORKSPACE_ROOT/bin/backend/generate-env"
       cd backend-flask
       pip install -r requirements.txt
   - name: sharp
     command: |
       source  "$THEIA_WORKSPACE_ROOT/bin/avatar/sharp"
+  - name: react-js
+    command: |
+      ruby "$THEIA_WORKSPACE_ROOT/bin/frontend/generate-env"
+      cd frontend-react-js
+      npm i
   - name: cdk
     before: |
       npm install aws-cdk -g
       cd thumbing-serverless-cdk
       cp .env.example .env
       npm i
+  - name: docker
+    before: |
+      source "$THEIA_WORKSPACE_ROOT/bin/ecr/login"
   - name: postgres
     before: |
       curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
