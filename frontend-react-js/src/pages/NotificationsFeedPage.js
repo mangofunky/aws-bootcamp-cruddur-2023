@@ -38,7 +38,6 @@ export default function NotificationsFeedPage() {
     }
   };
 
-
   React.useEffect(()=>{
     //prevents double call
     if (dataFetchedRef.current) return;
