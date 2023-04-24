@@ -3,7 +3,7 @@ import React from "react";
 import process from 'process';
 import {ReactComponent as BombIcon} from './svg/bomb.svg';
 
-import ActivityContent  from '../components/ActivityContent';
+import ActivityContent  from 'components/ActivityContent';
 
 export default function ReplyForm(props) {
   const [count, setCount] = React.useState(0);
@@ -57,6 +57,11 @@ export default function ReplyForm(props) {
     setMessage(event.target.value);
   }
 
+    const close = ()=> {
+    console.log('close')
+    //props.setPopped(false)
+  }
+
   let content;
   if (props.activity){
     content = <ActivityContent activity={props.activity} />;
@@ -65,7 +70,7 @@ export default function ReplyForm(props) {
 
   if (props.popped === true) {
     return (
-      <div className="popup_form_wrap">
+      <div className="popup_form_wrap" onClick={close}>
         <div className="popup_form">
           <div className="popup_heading">
           </div>
