@@ -13,7 +13,7 @@ timestamp = str(int(time.time()))
 
 filename = f"{timestamp}_{name}.py"
 
-# covert underscore name to TitleCase eg. add_bio_column -> AddBioColumn
+# covert undername name to title case eg. add_bio_column -> AddBioColumn
 klass = name.replace('_', ' ').title().replace(' ', '')
 
 file_content = f"""
