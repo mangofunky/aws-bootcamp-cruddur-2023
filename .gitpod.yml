@@ -8,6 +8,7 @@ tasks:
       unzip -o awscliv2.zip
       sudo ./aws/install
       source "$THEIA_WORKSPACE_ROOT/bin/ecr/login"
+      cd $THEIA_WORKSPACE_ROOT
   - name: fargate
     before: |
       cd /workspace
