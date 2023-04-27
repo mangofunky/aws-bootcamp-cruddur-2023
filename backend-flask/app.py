@@ -97,7 +97,7 @@ cors = CORS(
 )
 
 # This is for CloudWatch Logs
-#@app.after_request
+# @app.after_request
 #def after_request(response):
 #    timestamp = strftime('[%Y-%b-%d %H:%M]')
 #    LOGGER.error('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
@@ -107,7 +107,7 @@ cors = CORS(
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
 
 
-# @app.before_first_request
+# @app.before_first_request()
 def init_rollbar():
     """init rollbar module"""
     rollbar.init(
