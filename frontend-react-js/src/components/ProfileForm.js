@@ -77,7 +77,7 @@ export default function ProfileForm(props) {
       await getAccessToken()
       const access_token = localStorage.getItem("access_token")
       const res = await fetch(backend_url, {
-        method: "PUT",
+        method: "POST",
         headers: {
           'Authorization': `Bearer ${access_token}`,
           'Accept': 'application/json',
@@ -118,7 +118,10 @@ export default function ProfileForm(props) {
   if (props.popped === true) {
     return (
       <div className="popup_form_wrap profile_popup" onClick={close}>
-        <form className="profile_form popup_form" onSubmit={onsubmit}>
+        <form 
+          className='profile_form popup_form'
+          onSubmit={onsubmit}
+        >
           <div className="popup_heading">
             <div className="popup_title">Edit Profile</div>
             <div className='submit'>
@@ -126,6 +129,7 @@ export default function ProfileForm(props) {
             </div>
           </div>
           <div className="popup_content">
+            
           <input type="file" name="avatarupload" onChange={s3upload} />
 
             <div className="field display_name">
