@@ -44,17 +44,14 @@ export default function ProfileForm(props) {
     const size = file.size
     const type = file.type
     console.log('file',file,filename,size,type)
-    const formData = new FormData();
-    formData.append('file', file)
   try {
     console.log("S3 upload")
     const backend_url = ""
     const res = await fetch(backend_url, {
       method: "PUT",
-      body: formData,
+      body: file,
       headers: {
-        'Accept': "application/json",
-        'Content-Type': "application/json"
+        'Content-Type': 'type'
       }})
     let data = await res.json();
     
