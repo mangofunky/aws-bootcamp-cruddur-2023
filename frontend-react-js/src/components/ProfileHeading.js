@@ -1,6 +1,5 @@
 import './ProfileHeading.css';
 import EditProfileButton from '../components/EditProfileButton';
-
 import ProfileAvatar from 'components/ProfileAvatar'
 
 export default function ProfileHeading(props) {
