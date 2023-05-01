@@ -20,6 +20,7 @@ tasks:
       ruby "$THEIA_WORKSPACE_ROOT/bin/backend/generate-env"
       cd backend-flask
       pip install -r requirements.txt
+      source "$THEIA_WORKSPACE_ROOT/backend-flask.env"
   - name: sharp
     command: |
       source  "$THEIA_WORKSPACE_ROOT/bin/avatar/sharp"
@@ -28,6 +29,7 @@ tasks:
       ruby "$THEIA_WORKSPACE_ROOT/bin/frontend/generate-env"
       cd frontend-react-js
       npm i
+      source "$THEIA_WORKSPACE_ROOT/frontend-react-js.env"
   - name: cdk
     before: |
       npm install aws-cdk -g

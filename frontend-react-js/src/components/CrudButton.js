@@ -4,6 +4,7 @@ export default function CrudButton(props) {
   const pop_activities_form = (event) => {
     event.preventDefault();
     props.setPopped(true);
+    return false;
   }
 
   return (
