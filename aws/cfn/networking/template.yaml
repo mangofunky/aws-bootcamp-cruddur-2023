@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+
+# VPC
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: String
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Ipv4IpamPoolId: String
+      Ipv4NetmaskLength: Integer
+      Tags: 
+        - Key: Name
+          Value: !Sub "${AWS::StackName}VPC"
+# IGW
+# Route Tables
+# Subnets
+# Subnet A
+# Subnet B
+# Subnet C
