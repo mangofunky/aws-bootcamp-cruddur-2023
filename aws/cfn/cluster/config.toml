@@ -1,0 +1,8 @@
+[deploy]
+bucket = 'cfn-artifacts-mangofunky'
+region = 'us-east-1'
+stack_name = 'CrdCluster'
+
+[parameters]
+CertificateArn = 'arn:aws:acm:us-east-1:223324084052:certificate/2382728d-96fa-47e0-ab16-a2c2c784f02f'
+NetworkingStack = 'CrdNet'
