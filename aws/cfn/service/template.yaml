@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Task Definition File
+  Service
+
+Parameters:
+  NetworkingStack:
+    Type: String
+    Description: This is our base layer of networking components eg. VPC, Subnets
+    Default: CrdNet
+  ClusterStack:
+    Type: String
+    Description: This is our base layer of the cluster components eg. ECS,ALB, ALBSG etc
+    Default: CrdCluster
+Resources:
+  ServiceSG:
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${AWS::StackName}AlbSG"
+      GroupDescription: Public Facing SG for our Cruddur ALB
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${NetworkingStack}VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::ImportValue:
+              !Sub ${ClusterStack}ALBSecurityGroupId
+          FromPort: 80
+          ToPort: 80
+          CidrIp: '0.0.0.0/0'
+          Description: ALB HTTP
+  FargateService:
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Fn::ImportValue:
+          !Sub "${ClusterStack}ClusterName"
+      DeploymentController:
+        Type: ECS
+      DesiredCount: 1
+      EnableECSManagedTags: true
+      EnableExecuteCommand: true
+      HealthCheckGracePeriodSeconds: 0
+      LaunchType: FARGATE
+      LoadBalancers:
+      # TODO - UPDATE THIS
+        - TargetGroupArn: 'arn:aws:elasticloadbalancing:ca-central-1:387543059434:targetgroup/cruddur-backend-flask-tg/87ed2a3daf2d2b1d'
+          ContainerName: 'backend-flask'
+          ContainerPort: !Ref ContainerPort
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !GetAtt ServiceSG.GroupId
+          Subnets:
+            Fn::Split:
+              - ","
+              - Fn::ImportValue:
+                  !Sub "${NetworkingStack}PublicSubnetIds"
+      PlatformVersion: LATEST
+      PropagateTags: SERVICE
+      ServiceRegistries:
+        - RegistryArn: !Sub 'arn:aws:servicediscovery:${AWS::Region}:${AWS::AccountId}:service/srv-cruddur-backend-flask'
+          Port: !Ref ContainerPort
+          ContainerName: 'backend-flask'
+          ContainerPort: !Ref ContainerPort
+      ServiceName: !Ref ServiceName
+      TaskDefinition: !Ref TaskDefinition
+      
+  TaskDefinition:
+  ExecutionRole:
+  TaskRole:
