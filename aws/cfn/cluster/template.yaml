@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
+
 Description: |
   The networking and cluster configuration to support fargate containers
   - ECS Fargate Cluster
@@ -14,6 +15,7 @@ Description: |
     - redirects to HTTPS Listerner
   - Backend Target Group
   - Frontend Target Group
+
 Parameters:
   NetworkingStack:
     Type: String
@@ -76,7 +78,7 @@ Resources:
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-cluster.html
     Type: 'AWS::ECS::Cluster'
     Properties:
-      ClusterName: !Sub "${AWS::StackName}Cluster" # when not specified it will be autocreated
+      ClusterName: !Sub "${AWS::StackName}FargateCluster" # when not specified it will be autocreated
       CapacityProviders:
         - FARGATE
       ClusterSettings:
@@ -156,7 +158,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig: 
             Values: 
-              - api.cruddur.com
+              - api.mangofunky.co.uk
       Actions: 
         - Type: forward
           TargetGroupArn:  !Ref BackendTG
@@ -182,6 +184,7 @@ Resources:
           ToPort: 80
           CidrIp: '0.0.0.0/0'
           Description: INTERNET HTTP
+  # We have to create this SG before the service so we can pass it to database SG
   ServiceSG:
     # We create this SH before the service so we can pass it on to the Database SG 
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html
@@ -195,8 +198,8 @@ Resources:
       SecurityGroupIngress:
         - IpProtocol: tcp
           SourceSecurityGroupId: !GetAtt ALBSG.GroupId
-          FromPort: 80
-          ToPort: 80
+          FromPort: !Ref BackendPort
+          ToPort: !Ref BackendPort
           Description: ALB HTTP       
   BackendTG:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
@@ -225,8 +228,8 @@ Resources:
         Fn::ImportValue:
           !Sub ${NetworkingStack}VpcId
       Tags:
-        - Key: TG-Name
-          Value: !Sub "${AWS::StackName}BackendTG"
+        - Key: target-group-name
+          Value: backend
   FrontendTG:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -254,8 +257,8 @@ Resources:
         Fn::ImportValue:
           !Sub ${NetworkingStack}VpcId
       Tags:
-        - Key: TG-Name
-          Value: !Sub "${AWS::StackName}FrontendTG"
+        - Key: target-group-name
+          Value: frontend
 Outputs:
   ClusterName:
     Value: !Ref FargateCluster
@@ -266,14 +269,14 @@ Outputs:
     Export:
       Name: !Sub "${AWS::StackName}ALBSecurityGroupId"
   FrontendTGArn:
-    Value: !Ref BackendTG 
+    Value: !Ref FrontendTG
     Export:
       Name: !Sub "${AWS::StackName}FrontendTGArn"
   BackendTGArn:
-    Value: !Ref FrontendTG
+    Value: !Ref BackendTG
     Export:
       Name: !Sub "${AWS::StackName}BackendTGArn"
-  ServiceSecurityGroudId:
-    Value: !Ref ServiceSG.GroupId
+  ServiceSecurityGroupId:
+    Value: !GetAtt ServiceSG.GroupId
     Export:
-      Name: !Sub "${AWS::StackName}ServiceSGId"
+      Name: !Sub "${AWS::StackName}ServiceSecurityGroupId"

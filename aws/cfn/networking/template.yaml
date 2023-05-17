@@ -22,18 +22,33 @@ Parameters:
     Description: "Comma-delimited list of CIDR blocks for our private public subnets"
     Type: CommaDelimitedList
     Default: >
-      10.0.0.0/21, 
-      10.0.8.0/21, 
-      10.0.16.0/21, 
-      10.0.24.0/21,
-      10.0.32.0/21,
-      10.0.40.0/21
+      10.0.0.0/24, 
+      10.0.1.0/24, 
+      10.0.2.0/24, 
+      10.0.3.0/24,
+      10.0.4.0/24,
+      10.0.5.0/24,
+      10.0.6.0/24, 
+      10.0.7.0/24, 
+      10.0.8.0/24, 
+      10.0.9.0/24,
+      10.0.10.0/24,
+      10.0.11.0/24
   Az2:
     Type: AWS::EC2::AvailabilityZone::Name
     Default: us-east-1b
   Az3:
     Type: AWS::EC2::AvailabilityZone::Name
     Default: us-east-1c
+  Az4:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: us-east-1d
+  Az5:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: us-east-1e
+  Az6:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: us-east-1f
 Resources:
   VPC:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html
@@ -110,12 +125,48 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}SubnetPub3"
+  SubnetPub4:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az4
+      CidrBlock: !Select [3, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: true #public subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPub4"
+  SubnetPub5:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az5
+      CidrBlock: !Select [4, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: true #public subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPub5"
+  SubnetPub6:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az6
+      CidrBlock: !Select [5, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: true #public subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPub6"
   SubnetPriv1:
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az1
-      CidrBlock: !Select [3, !Ref SubnetCidrBlocks]
+      CidrBlock: !Select [6, !Ref SubnetCidrBlocks]
       EnableDns64: false
       MapPublicIpOnLaunch: false #private subnet
       VpcId: !Ref VPC
@@ -127,7 +178,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az2
-      CidrBlock: !Select [4, !Ref SubnetCidrBlocks]
+      CidrBlock: !Select [7, !Ref SubnetCidrBlocks]
       EnableDns64: false
       MapPublicIpOnLaunch: false #private subnet
       VpcId: !Ref VPC
@@ -139,13 +190,49 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Ref Az3
-      CidrBlock: !Select [5, !Ref SubnetCidrBlocks]
+      CidrBlock: !Select [8, !Ref SubnetCidrBlocks]
       EnableDns64: false
       MapPublicIpOnLaunch: false #private subnet
       VpcId: !Ref VPC
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}SubnetPriv3"
+  SubnetPriv4:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az4
+      CidrBlock: !Select [9, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: false #private subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPriv4"
+  SubnetPriv5:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az5
+      CidrBlock: !Select [10, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: false #private subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPriv5"
+  SubnetPriv6:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref Az6
+      CidrBlock: !Select [11, !Ref SubnetCidrBlocks]
+      EnableDns64: false
+      MapPublicIpOnLaunch: false #private subnet
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}SubnetPriv6"
   SubnetPub1RTAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -161,6 +248,21 @@ Resources:
     Properties:
       SubnetId: !Ref SubnetPub3
       RouteTableId: !Ref RouteTable
+  SubnetPub4RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPub4
+      RouteTableId: !Ref RouteTable
+  SubnetPub5RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPub5
+      RouteTableId: !Ref RouteTable
+  SubnetPub6RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPub6
+      RouteTableId: !Ref RouteTable
   SubnetPriv1RTAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -175,6 +277,21 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref SubnetPriv3
+      RouteTableId: !Ref RouteTable
+  SubnetPriv4RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPriv4
+      RouteTableId: !Ref RouteTable
+  SubnetPriv5RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPriv5
+      RouteTableId: !Ref RouteTable
+  SubnetPriv6RTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPriv6
       RouteTableId: !Ref RouteTable
 Outputs:
   VpcId: 
@@ -195,6 +312,9 @@ Outputs:
       - - !Ref SubnetPub1
         - !Ref SubnetPub2
         - !Ref SubnetPub3
+        - !Ref SubnetPub4
+        - !Ref SubnetPub5
+        - !Ref SubnetPub6
     Export:
       Name: !Sub "${AWS::StackName}PublicSubnetIds"
   PrivateSubnetIds:
@@ -203,6 +323,9 @@ Outputs:
       - - !Ref SubnetPriv1
         - !Ref SubnetPriv2
         - !Ref SubnetPriv3
+        - !Ref SubnetPriv4
+        - !Ref SubnetPriv5
+        - !Ref SubnetPriv6
     Export:
       Name: !Sub "${AWS::StackName}PrivateSubnetIds"
   AvailabilityZones:
@@ -211,5 +334,8 @@ Outputs:
       - - !Ref Az1
         - !Ref Az2
         - !Ref Az3
+        - !Ref Az4
+        - !Ref Az5
+        - !Ref Az6
     Export:
       Name: !Sub "${AWS::StackName}AvailabilityZones"
