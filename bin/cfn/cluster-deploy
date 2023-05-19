@@ -20,5 +20,5 @@ aws cloudformation deploy \
   --no-execute-changeset \
   --tags group=cruddur-cluster \
   --parameter-overrides $PARAMETERS \
-  --s3-prefix "cruddur-cluster"
+  --s3-prefix "cluster"
   --capabilities CAPABILITY_NAMED_IAM
