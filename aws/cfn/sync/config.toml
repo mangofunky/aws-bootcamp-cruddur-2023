@@ -1,0 +1,9 @@
+[deploy]
+bucket = 'cfn-artifacts-mangofunky'
+region = 'us-east-1'
+stack_name = 'CrdSyncRole'
+
+[parameters]
+GitHubOrg = 'mangofunky'
+RepositoryName = 'aws-bootcamp-cruddur-2023'
+OIDCProviderArn = ''
