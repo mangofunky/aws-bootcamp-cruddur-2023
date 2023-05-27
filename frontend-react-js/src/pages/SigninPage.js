@@ -20,7 +20,7 @@ export default function SigninPage() {
         window.location.href = "/"
       })
       .catch(error => { 
-        if (error.code == 'UserNotConfirmedException') {
+        if (error.code === 'UserNotConfirmedException') {
           window.location.href = "/confirm"
         }
         setErrors(error.message)    

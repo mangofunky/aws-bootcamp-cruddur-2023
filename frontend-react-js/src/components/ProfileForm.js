@@ -2,10 +2,13 @@ import "./ProfileForm.css";
 import React from "react";
 import process from "process";
 import { getAccessToken } from "lib/CheckAuth";
+//import {put} from 'lib/Requests';
+//import FormErrors from 'components/FormErrors';
 
 export default function ProfileForm(props) {
   const [bio, setBio] = React.useState("");
   const [displayName, setDisplayName] = React.useState("");
+  const [errors, setErrors] = React.useState('');
 
   React.useEffect(() => {
     setBio(props.profile.bio || "");
@@ -16,9 +19,9 @@ export default function ProfileForm(props) {
     const file = event.target.files[0];
 
     const filename = file.name;
-    const size = file.size;
+    //const size = file.size;
     const type = file.type;
-    const preview_image_url = URL.createObjectURL(file);
+    //const preview_image_url = URL.createObjectURL(file);
     const fileparts = filename.split(".");
     const extension = fileparts[fileparts.length - 1];
     const presignedurl = await s3uploadKey(extension);
@@ -93,7 +96,7 @@ export default function ProfileForm(props) {
           display_name: displayName,
         }),
       });
-      let data = await res.json();
+      //let data = await res.json();
       if (res.status === 200) {
         setBio(null);
         setDisplayName(null);
