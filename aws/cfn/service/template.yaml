@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Task Definition File
   Service
-
 Parameters:
   NetworkingStack:
     Type: String
@@ -47,10 +46,10 @@ Parameters:
     Default: 1nr4ihq5fodh893m68t2evmkfu
   EnvFrontendUrl:
     Type: String
-    Default: "*"
+    Default: "https://mangofunky.co.uk"
   EnvBackendUrl:
     Type: String
-    Default: "*"
+    Default: "https://api.mangofunky.co.uk"
   SecretsAWSAccessKeyId:
     Type: String
     Default: 'arn:aws:ssm:us-east-1:223324084052:parameter/cruddur/backend-flask/AWS_ACCESS_KEY_ID'
