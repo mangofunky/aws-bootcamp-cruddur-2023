@@ -203,16 +203,18 @@ def data_update_profile():
 @app.route("/api/messages", methods=['POST', 'OPTIONS'])
 @cross_origin()
 def data_create_message():
+  message_group_uuid = request.json.get('message_group_uuid', None)
+  user_receiver_handle = request.json.get('handle', None)
+  message = request.json['message']
   access_token = extract_access_token(request.headers)
   try:
     claims = cognito_jwt_token.verify(access_token)
+    # authenticated request
+    app.logger.debug("authenticated")
+    app.logger.debug(claims)
     cognito_user_id = claims['sub']
-    message_group_uuid = request.json.get('message_group_uuid', None)
-    user_receiver_handle = request.json.get('handle', None)
-    message = request.json['message']
-    
     if message_group_uuid == None:
-          # Create for the first time
+      # Create for the first time
       model = CreateMessage.run(
         mode="create",
         message=message,
@@ -235,7 +237,6 @@ def data_create_message():
   except TokenVerifyError as e:
     # unauthenicatied request
     app.logger.debug(e)
-    app.logger.debug("unauthenicated")
     return {}, 401
 
 @app.route("/api/activities/home", methods=['GET'])
@@ -279,16 +280,21 @@ def data_search():
 @app.route("/api/activities", methods=['POST','OPTIONS'])
 @cross_origin()
 def data_activities():
-    user_handle = request.json["user_handle"]
+  access_token = extract_access_token(request.headers)
+  try:
+    claims = cognito_jwt_token.verify(access_token)
+    cognito_user_id = claims['sub']
     message = request.json['message']
     ttl = request.json['ttl']
-    model = CreateActivity.run(message, user_handle, ttl)
+    model = CreateActivity.run(message, cognito_user_id, ttl)
     if model['errors'] is not None:
         return model['errors'], 422
     else:
         return model['data'], 200
-    return
-
+  except TokenVerifyError as e:
+        # unauthenicatied request
+    app.logger.debug(e)
+    return {}, 401
 
 @app.route("/api/activities/<string:activity_uuid>", methods=['GET'])
 @xray_recorder.capture('activities_show')
