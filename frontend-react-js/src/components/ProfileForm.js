@@ -61,9 +61,10 @@ export default function ProfileForm(props) {
         body: JSON.stringify(json),
         method: "POST",
         headers: {
-          Authorization: `Bearer ${access_token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          'Origin': process.env.REACT_APP_FRONTEND_URL,
+          'Authorization': `Bearer ${access_token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
       });
 
