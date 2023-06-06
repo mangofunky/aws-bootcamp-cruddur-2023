@@ -2,3 +2,8 @@
 bucket = 'cfn-artifacts-mangofunky'
 region = 'us-east-1'
 stack_name = 'CrdSrvBackendFlask'
+
+[parameters]
+EnvFrontendUrl = 'https://mangofunky.co.uk'
+EnvBackendUrl = 'https://api.mangofunky.co.uk'
+DDBMessageTable = 'CrdDdb-DynamoDBTable-10TVOIOFR684K'
