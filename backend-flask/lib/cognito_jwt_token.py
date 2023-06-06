@@ -35,7 +35,6 @@ class CognitoJwtToken:
             self.request_client = request_client
         self._load_jwk_keys()
 
-
     def _load_jwk_keys(self):
         keys_url = f"https://cognito-idp.{self.region}.amazonaws.com/{self.user_pool_id}/.well-known/jwks.json"
         try:
@@ -93,7 +92,8 @@ class CognitoJwtToken:
         if not current_time:
             current_time = time.time()
         if current_time > claims["exp"]:
-            raise TokenVerifyError("Token is expired")  # probably another exception
+            # probably another exception
+            raise TokenVerifyError("Token is expired")
 
     def _check_audience(self, claims):
         # and the Audience  (use claims['client_id'] if verifying an access token)
@@ -114,32 +114,31 @@ class CognitoJwtToken:
         self._check_expiration(claims, current_time)
         self._check_audience(claims)
 
-        self.claims = claims 
+        self.claims = claims
         return claims
 
-    from functools import wraps, partial
+def jwt_required(f=None, on_error=None):
+    if f is None:
+        return partial(jwt_required, on_error=on_error)
 
-    def jwt_required(f=None, on_error=None):
-        if f is None:
-            return partial(jwt_required, on_error=on_error)
-
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            cognito_jwt_token = CognitoJwtToken(
-                user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"), 
-                user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
-                region=os.getenv("AWS_DEFAULT_REGION")
-            )
-            access_token = extract_access_token(request.headers)
-            try:
-                claims = cognito_jwt_token.verify(access_token)
-                # is this a bad idea using a global?
-                g.cognito_user_id = claims['sub']  # storing the user_id in the global g object
-            except TokenVerifyError as e:
-                # unauthenticated request
-                app.logger.debug(e)
-                if on_error:
-                    return on_error(e)
-                return {}, 401
-            return f(*args, **kwargs)
-        return decorated_function
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        cognito_jwt_token = CognitoJwtToken(
+            user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"),
+            user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
+            region=os.getenv("AWS_DEFAULT_REGION")
+        )
+        access_token = extract_access_token(request.headers)
+        try:
+            claims = cognito_jwt_token.verify(access_token)
+            # is this a bad idea using a global?
+            # storing the user_id in the global g object
+            g.cognito_user_id = claims['sub']
+        except TokenVerifyError as e:
+            # unauthenticated request
+            app.logger.debug(e)
+            if on_error:
+                return on_error(e)
+            return {}, 401
+        return f(*args, **kwargs)
+    return decorated_function
