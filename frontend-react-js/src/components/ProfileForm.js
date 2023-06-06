@@ -56,7 +56,7 @@ export default function ProfileForm(props) {
     console.log(filename,size,type)
     const fileparts = filename.split('.')
     const extension = fileparts[fileparts.length-1]
-    const presignedurl = await s3uploadkey(extension)
+    const presignedurl = await s3uploadKey(extension)
     try {
       console.log('s3upload')
       const res = await fetch(presignedurl, {
