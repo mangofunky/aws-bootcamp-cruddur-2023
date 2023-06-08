@@ -52,7 +52,7 @@ class CreateActivity:
   def create_activity(cognito_user_id, message, expires_at):
     sql = db.template('activities','create')
     uuid = db.query_commit(sql,{
-        'cognito_user_id': cognito_user_id,
+      'cognito_user_id': cognito_user_id,
       'message': message,
       'expires_at': expires_at
     })
