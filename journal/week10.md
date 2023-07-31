@@ -3,6 +3,7 @@
 ## DISCLAIMER
 
 I've been trying to work with Gitpod but for the last few weeks and for some unknown reasons I'm not able to connect to AWS despite hundreds of attempts also issuing new keys and with several tickets to the support team and discord channel chats without any luck so everything here is based on memory, going through the videos again and looking at other peoples journals (not copying - everything here is my own words and work).
+So I wasn't able to carry out some further of the functionality implementation or debugging of the frontend. Please take this into account. 
 
 When I try to login to ECR I always get:
 
@@ -33,10 +34,13 @@ On this week we worked on CI/CD Pipeline using AWS Cloudformation
 
 Index of work done
 
-CI/CD
+
 
 Networking Stack
 
+
+
+CI/CD
 
 We created CI/CD directory with a deploy file
 
