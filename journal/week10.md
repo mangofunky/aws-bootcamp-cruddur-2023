@@ -341,6 +341,7 @@ The latter script needed to have the dotenv gem installed
 
 ![Upload/change profile avatar](images/profile-upload.png)
 ![Upload/change profile avatar](images/update-profile.png)
+After updating the profile image
 ![Upload/change profile avatar](images/updated.png)
 
 Wrote a Cruddur today
@@ -348,3 +349,13 @@ Wrote a Cruddur today
 ![Upload/change profile avatar](images/submitted-cruddur-today.png)
 
 ![Cruddur Messages](images/cruddur-messages.png)
+
+## CORS
+
+This was for me the most challenging part (after DynamoDB). I managed to get the CORS to work by clearing the CORS in the API GW console as per screenshot below and only leaving them in the Lambda Function but it took so much trial and error to get there.
+
+![CORS Settings in API Gateway](images/CORS-APIGW.png)
+
+![CORS in Lambda](images/CORS-Lambda.png)
+
+
