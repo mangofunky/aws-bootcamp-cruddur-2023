@@ -47,20 +47,54 @@ In this week we worked on CI/CD Pipeline using AWS Cloudformation
 ![Cruddur Stack Diagram](images/cruddur-stack-diagram.png)
 
 
-Diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
-
-* [Networking Stack](#networking)
-
-* [CI/CD Stack](#cicd)
+Full diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
 
 * [Cluster Stack](#cluster)
 
-* [RDS Stack](#db)
+* [Networking Stack](#networking)
 
-* [Frontend Stack](#frontend)
+* [RDS Stack](#db)
 
 * [Service Stack](#service)
 
+* [Frontend Stack](#frontend)
+
+* [CI/CD Stack](#cicd)
+
+* [Sync Stack](#sync)
+
+## Cluster<a name="cluster"></a>
+
+We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/cluster* command to generate the *CrdCluster* stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/cluster/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/cluster/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-cluster \
+  --parameter-overrides $PARAMETERS \
+  --s3-prefix "cluster" \
+  --capabilities CAPABILITY_NAMED_IAM
+```
 
 ## Networking Stack - CFN Network Template<a name="networking"></a>
 
@@ -97,6 +131,104 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 ![Networking Diagram](images/networking-diagram.png)
+
+## RDS Stack<a name="db"></a>
+
+We created *cluster* directory *aws/cfn/db* for the *config.toml* and the *template.yaml* files
+Run *./bin/cfn/db* command to generate the *CrdDb* stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix "db" \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-db \
+  --parameter-overrides $PARAMETERS MasterUserPassword=$DB_PASSWORD \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## Service Stack<a name="service"></a>
+
+We created *cluster* directory *aws/cfn/service* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/service* command to generate the *CrdSrvBackendFlask* backend stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix "backend-service" \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-backend-flask \
+  --parameter-overrides $PARAMETERS \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## Frontend Stack<a name="frontend"></a>
+
+We created *cluster* directory *aws/cfn/frontend* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/frontend* command to generate the *CrdFrontend* stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix frontend \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-frontend \
+  --parameter-overrides $PARAMETERS \
+  --capabilities CAPABILITY_NAMED_IAM
+```
 
 ## CI/CD<a name="cicd"></a>
 
@@ -138,138 +270,6 @@ aws cloudformation deploy \
   --template-file "$PACKAGED_PATH" \
   --no-execute-changeset \
   --tags group=cruddur-cicd \
-  --parameter-overrides $PARAMETERS \
-  --capabilities CAPABILITY_NAMED_IAM
-```
-
-
-## Cluster<a name="cluster"></a>
-
-We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
-
-Run *./bin/cfn/cluster* command to generate the *CrdCluster* stack
-
-```bash
-#! /usr/bin/env bash
-set -e # stop the execution of the script if it fails
-
-CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/cluster/template.yaml"
-CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/cluster/config.toml"
-echo $CFN_PATH
-
-cfn-lint $CFN_PATH
-
-BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
-REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
-STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
-PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
-
-aws cloudformation deploy \
-  --stack-name $STACK_NAME \
-  --s3-bucket $BUCKET \
-  --region $REGION \
-  --template-file "$CFN_PATH" \
-  --no-execute-changeset \
-  --tags group=cruddur-cluster \
-  --parameter-overrides $PARAMETERS \
-  --s3-prefix "cluster" \
-  --capabilities CAPABILITY_NAMED_IAM
-```
-
-## RDS Stack<a name="db"></a>
-
-We created *cluster* directory *aws/cfn/db* for the *config.toml* and the *template.yaml* files
-Run *./bin/cfn/db* command to generate the *CrdDb* stack
-
-```bash
-#! /usr/bin/env bash
-set -e # stop the execution of the script if it fails
-
-CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/template.yaml"
-CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/config.toml"
-echo $CFN_PATH
-
-cfn-lint $CFN_PATH
-
-BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
-REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
-STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
-PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
-
-aws cloudformation deploy \
-  --stack-name $STACK_NAME \
-  --s3-bucket $BUCKET \
-  --s3-prefix "db" \
-  --region $REGION \
-  --template-file "$CFN_PATH" \
-  --no-execute-changeset \
-  --tags group=cruddur-db \
-  --parameter-overrides $PARAMETERS MasterUserPassword=$DB_PASSWORD \
-  --capabilities CAPABILITY_NAMED_IAM
-```
-
-## Frontend Stack<a name="frontend"></a>
-
-We created *cluster* directory *aws/cfn/frontend* for the *config.toml* and the *template.yaml* files
-
-Run *./bin/cfn/frontend* command to generate the *CrdFrontend* stack
-
-```bash
-#! /usr/bin/env bash
-set -e # stop the execution of the script if it fails
-
-CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/template.yaml"
-CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/config.toml"
-echo $CFN_PATH
-
-cfn-lint $CFN_PATH
-
-BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
-REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
-STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
-PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
-
-aws cloudformation deploy \
-  --stack-name $STACK_NAME \
-  --s3-bucket $BUCKET \
-  --s3-prefix frontend \
-  --region $REGION \
-  --template-file "$CFN_PATH" \
-  --no-execute-changeset \
-  --tags group=cruddur-frontend \
-  --parameter-overrides $PARAMETERS \
-  --capabilities CAPABILITY_NAMED_IAM
-```
-
-## Service Stack<a name="service"></a>
-
-We created *cluster* directory *aws/cfn/service* for the *config.toml* and the *template.yaml* files
-
-Run *./bin/cfn/service* command to generate the *CrdSrvBackendFlask* backend stack
-
-```bash
-#! /usr/bin/env bash
-set -e # stop the execution of the script if it fails
-
-CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/template.yaml"
-CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/config.toml"
-echo $CFN_PATH
-
-cfn-lint $CFN_PATH
-
-BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
-REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
-STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
-PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
-
-aws cloudformation deploy \
-  --stack-name $STACK_NAME \
-  --s3-bucket $BUCKET \
-  --s3-prefix "backend-service" \
-  --region $REGION \
-  --template-file "$CFN_PATH" \
-  --no-execute-changeset \
-  --tags group=cruddur-backend-flask \
   --parameter-overrides $PARAMETERS \
   --capabilities CAPABILITY_NAMED_IAM
 ```
