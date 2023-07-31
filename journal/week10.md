@@ -87,7 +87,7 @@ aws cloudformation deploy \
   --tags group=cruddur-networking \
   --capabilities CAPABILITY_NAMED_IAM
 ```
-[images/networking-diagram.png]
+![Networking DIagram](images/networking-diagram.png)
 
 ## CI/CD<a name="cicd"></a>
 
