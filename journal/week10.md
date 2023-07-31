@@ -40,9 +40,7 @@ and with no chance to get access to the logs
 
 In this week we worked on CI/CD Pipeline using AWS Cloudformation
 
-## Index of work done
-
-### Cruddur Stack
+## Cruddur Stack
 
 ![Cruddur Stack Diagram](images/cruddur-stack-diagram.png)
 
@@ -319,3 +317,9 @@ bundle update --bundler
       cargo install cfn-guard
       gem install cfn-toml  
 ```
+
+## CI/CD Pipeline Screenshot
+
+Run the CI/CD pipeline successfully in Code Pipeline
+
+![CI/CD Pipeline](images/cicd.png)
