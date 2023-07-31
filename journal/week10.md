@@ -40,13 +40,13 @@ Diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapR
 
 * [Networking Stack](#networking)
 
-* CI/CD Stack
+* [CI/CD Stack](#cicd)
 
-* Cluster Stack
+* [Cluster Stack](#cluster)
 
 * 
 
-Networking Stack - CFN Network Template<a name="networking"></a>
+## Networking Stack - CFN Network Template<a name="networking"></a>
 
 We created the networking directory *aws/cfn/networking* with the *config.toml* and the *template.yaml* files
 
@@ -60,7 +60,7 @@ Then run the following command *./bin/cfn/networking* to create the *CrdNet* sta
 
 
 
-##CI/CD
+## CI/CD<a name="cicd"></a>
 
 We created CI/CD directory *aws/cfn/cicd* for the *config.toml* and the *template.yaml* files
 
@@ -105,7 +105,7 @@ aws cloudformation deploy \
 ```
 
 
-## Cluster 
+## Cluster<a name="cluster"></a>
 
 We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
 
