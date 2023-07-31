@@ -62,7 +62,7 @@ Full diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ
 
 * [Sync Stack](#sync)
 
-## Cluster<a name="cluster"></a>
+## Cluster - CFN Cluster Template<a name="cluster"></a> 
 
 We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
 
@@ -131,7 +131,7 @@ aws cloudformation deploy \
 ```
 ![Networking Diagram](images/networking-diagram.png)
 
-## RDS Stack<a name="db"></a>
+## RDS Stack - CFN RDS DB Template<a name="db"></a>
 
 We created *cluster* directory *aws/cfn/db* for the *config.toml* and the *template.yaml* files
 Run *./bin/cfn/db* command to generate the *CrdDb* stack
@@ -163,7 +163,7 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-## Service Stack<a name="service"></a>
+## Service Stack - CFN Backend Stack Template<a name="service"></a>
 
 We created *cluster* directory *aws/cfn/service* for the *config.toml* and the *template.yaml* files
 
@@ -196,7 +196,7 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-## Frontend Stack<a name="frontend"></a>
+## Frontend Stack - CFN Frontend Template<a name="frontend"></a>
 
 We created *cluster* directory *aws/cfn/frontend* for the *config.toml* and the *template.yaml* files
 
@@ -229,7 +229,7 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-## CI/CD<a name="cicd"></a>
+## CI/CD - CFN CI/CD Template<a name="cicd"></a>
 
 We created CI/CD directory *aws/cfn/cicd* for the *config.toml* and the *template.yaml* files
 
@@ -273,7 +273,14 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-## Sync Stack<a name="sync"></a>
+Run the CI/CD pipeline successfully in Code Pipeline. See screenshot
+
+![CI/CD Pipeline Created](images/pipeline-created.png)
+
+![CI/CD Pipeline](images/cicd.png)
+
+
+## Sync Stack - CFN Cluster Template<a name="sync"></a>
 
 We created *cluster* directory *aws/cfn/sync* for the *config.toml* and the *template.yaml* files
 
@@ -306,6 +313,10 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
+## CloudFormation Stacks Successfully Created
+
+![CloudFormation Stacks Created](images/cfn.png)
+
 ## CFN Lint and CFN Guard
 
 Run the following command (inserted in .gitpod.yml file) to add linting support on Gitpod and to validate cloud environments and 
@@ -318,8 +329,22 @@ bundle update --bundler
       gem install cfn-toml  
 ```
 
-## CI/CD Pipeline Screenshot
+## Frontend Static Web Hosting
 
-Run the CI/CD pipeline successfully in Code Pipeline
+Used a tool written in Ruby to be able to sync development on gitpod to AWS S3 bucket for production, but also for when later on we need to make changes to the website and need to update the prod frontend running the following scripts:
+*./bin/frontend/static-build*
+To invalidate the Cloudfront cache another script can be invoked 
+*./bin/frontend/sync*
+The latter script needed to have the dotenv gem installed
 
-![CI/CD Pipeline](images/cicd.png)
+## Working Prod Cruddur Site Screenshots (up to where I could use Gitpod)
+
+![Upload/change profile avatar](images/profile-upload.png)
+![Upload/change profile avatar](images/update-profile.png)
+![Upload/change profile avatar](images/updated.png)
+
+Wrote a Cruddur today
+
+![Upload/change profile avatar](images/submitted-cruddur-today.png)
+
+![Cruddur Messages](images/cruddur-messages.png)
