@@ -1,11 +1,11 @@
 # Week 10 — CloudFormation Part 1
 
-## DISCLAIMER
+## Note to Andrew
 
-I've been trying to work with Gitpod but for the last few weeks and for some unknown reasons I'm not able to connect to AWS despite hundreds of attempts also issuing new keys and with several tickets to the support team and discord channel chats without any luck so everything here is based on memory, going through the videos again and looking at other peoples journals (not copying - everything here is my own words and work).
+I've been trying to work with Gitpod but for the last few weeks and for some unknown reasons I'm wasn't and still not able to connect to AWS despite hundreds of attempts. I also tried to issue new keys but no success. Had several tickets raised to the support team at Gitpod and through their discord channel chats but this produced no success. So everything here is based on memory, going through the videos again as much as I could and also looking at other peoples journals (not copying/cheatin or plagiarising  - everything here is my own work and words).
 In particular I consulted https://github.com/beiciliang/aws-bootcamp-cruddur-2023/blob/main/journal/week10.md, https://github.com/Rietta1/aws-bootcamp-cruddur-2023/blob/main/journal/week10.md
 So I wasn't able to carry out some further of the functionality implementation or debugging of the frontend. Please take this into account. 
-I realised though in the last few days that the work around would have been to manually download the images from AWS and upload them Gitpod but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time with trying to figure out the problem stopping me with everything else
+I realised though in the last few days that the work around would have been to manually download the images from AWS and upload them Gitpod but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time with trying to figure out the problem stopping me with everything else. I had a go with Jumppad as you recommended it, installed but the learningcurve to use it in the same way as Gitpod made me decide to learn it at a later stage as I wouldn't have had the time to submit.
 
 When I try to login to ECR I always get:
 
@@ -38,8 +38,15 @@ On this week we worked on CI/CD Pipeline using AWS Cloudformation
 
 Diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
 
+* [Networking Stack](#networking)
 
-Networking Stack - CFN Network Template
+* CI/CD Stack
+
+* Cluster Stack
+
+* 
+
+Networking Stack - CFN Network Template<a name="networking"></a>
 
 We created the networking directory *aws/cfn/networking* with the *config.toml* and the *template.yaml* files
 
@@ -98,7 +105,7 @@ aws cloudformation deploy \
 ```
 
 
-##Cluster 
+## Cluster 
 
 We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
 
