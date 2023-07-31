@@ -42,12 +42,13 @@ In this week we worked on CI/CD Pipeline using AWS Cloudformation
 
 ## Index of work done
 
-# Cruddur Stack
+### Cruddur Stack
 
 ![Cruddur Stack Diagram](images/cruddur-stack-diagram.png)
 
-
 Full diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
+
+## Index of work done
 
 * [Cluster Stack](#cluster)
 
@@ -309,7 +310,7 @@ aws cloudformation deploy \
 
 ## CFN Lint and CFN Guard
 
-Run the following command (inserten in .gitpod.yml file) to add linting support on Gitpod and to validate cloud environments and 
+Run the following command (inserted in .gitpod.yml file) to add linting support on Gitpod and to validate cloud environments and 
 
 ```
 bundle update --bundler
