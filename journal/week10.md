@@ -30,11 +30,13 @@ gitpod /workspace/aws-bootcamp-cruddur-2023 (main) $ aws sts get-caller-identity
 An error occurred (Unknown) when calling the GetCallerIdentity operation: Unknown
 gitpod /workspace/aws-bootcamp-cruddur-2023 (main) $ 
 ```
-with no chance to get access to the logs
+and with no chance to get access to the logs
 
-On this week we worked on CI/CD Pipeline using AWS Cloudformation
+***
 
-##Index of work done
+In this week we worked on CI/CD Pipeline using AWS Cloudformation
+
+## Index of work done
 
 Diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
 
@@ -44,7 +46,12 @@ Diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapR
 
 * [Cluster Stack](#cluster)
 
-* 
+* [RDS Stack](#db)
+
+* [Frontend Stack](#frontend)
+
+* [Service Stack](#service)
+
 
 ## Networking Stack - CFN Network Template<a name="networking"></a>
 
@@ -52,13 +59,35 @@ We created the networking directory *aws/cfn/networking* with the *config.toml* 
 
 Run *./bin/cfn/networking* command to generate the *CrdNet* stack
 
-The template creates a /16 CIDR VPC with 6 subnets for each private and public, IGW and RT, RT associations and Outputs to be used by other CFN templates.
+The template creates a /16 CIDR VPC with 6 subnets for each private and public, IGW and RT, RT associations and Outputs to be used by other CFN templates and can be seen [here](aws/cfn/networking/template.yaml)
 
-Can be seen [here](aws/cfn/networking/template.yaml)
+I run the following command *./bin/cfn/networking* to create the *CrdNet* stack
 
-Then run the following command *./bin/cfn/networking* to create the *CrdNet* stack
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
 
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/networking/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/networking/config.toml"
+echo $CFN_PATH
+echo $CONFIG_PATH
+cfn-lint $CFN_PATH
 
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix "networking" \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-networking \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+[images/networking-diagram.png]
 
 ## CI/CD<a name="cicd"></a>
 
@@ -136,4 +165,147 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS \
   --s3-prefix "cluster" \
   --capabilities CAPABILITY_NAMED_IAM
+```
+
+## RDS Stack<a name="db"></a>
+
+We created *cluster* directory *aws/cfn/db* for the *config.toml* and the *template.yaml* files
+Run *./bin/cfn/db* command to generate the *CrdDb* stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/db/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix "db" \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-db \
+  --parameter-overrides $PARAMETERS MasterUserPassword=$DB_PASSWORD \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## Frontend Stack<a name="frontend"></a>
+
+We created *cluster* directory *aws/cfn/frontend* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/frontend* command to generate the *CrdFrontend* stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/frontend/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix frontend \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-frontend \
+  --parameter-overrides $PARAMETERS \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## Service Stack<a name="service"></a>
+
+We created *cluster* directory *aws/cfn/service* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/service* command to generate the *CrdSrvBackendFlask* backend stack
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/service/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix "backend-service" \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-backend-flask \
+  --parameter-overrides $PARAMETERS \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## Sync Stack<a name="sync"></a>
+
+We created *cluster* directory *aws/cfn/sync* for the *config.toml* and the *template.yaml* files
+
+Run *./bin/cfn/service* command to generate the *CrdSyncRole* stack for syncing roles
+
+```bash
+#! /usr/bin/env bash
+set -e # stop the execution of the script if it fails
+
+CFN_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/sync/template.yaml"
+CONFIG_PATH="/workspace/aws-bootcamp-cruddur-2023/aws/cfn/sync/config.toml"
+echo $CFN_PATH
+
+cfn-lint $CFN_PATH
+
+BUCKET=$(cfn-toml key deploy.bucket -t $CONFIG_PATH)
+REGION=$(cfn-toml key deploy.region -t $CONFIG_PATH)
+STACK_NAME=$(cfn-toml key deploy.stack_name -t $CONFIG_PATH)
+PARAMETERS=$(cfn-toml params v2 -t $CONFIG_PATH)
+
+aws cloudformation deploy \
+  --stack-name $STACK_NAME \
+  --s3-bucket $BUCKET \
+  --s3-prefix sync \
+  --region $REGION \
+  --template-file "$CFN_PATH" \
+  --no-execute-changeset \
+  --tags group=cruddur-sync \
+  --parameter-overrides $PARAMETERS \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## CFN Lint and CFN Guard
+
+Run the following command (inserten in .gitpod.yml file) to add linting support on Gitpod and to validate cloud environments and 
+
+```
+bundle update --bundler
+      bundle install
+      pip install cfn-lint
+      cargo install cfn-guard
+      gem install cfn-toml  
 ```
