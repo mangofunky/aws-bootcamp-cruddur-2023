@@ -337,7 +337,7 @@ To invalidate the Cloudfront cache another script can be invoked
 *./bin/frontend/sync*
 The latter script needed to have the dotenv gem installed
 
-## Working Prod Cruddur Site Screenshots (up to where I could use Gitpod)
+## Clean Up - Working Prod Cruddur Site Screenshots (up to where I could use Gitpod)
 
 ![Upload/change profile avatar](images/profile-upload.png)
 ![Upload/change profile avatar](images/update-profile.png)
