@@ -46,7 +46,7 @@ In this week we worked on CI/CD Pipeline using AWS Cloudformation
 
 Full diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ8vapRjh_isMxNjf/view?usp=sharing)
 
-## Index of work done
+## Index of work done<a name="top"></a>
 
 * [Cluster Stack](#cluster)
 
@@ -102,6 +102,7 @@ aws cloudformation deploy \
   --s3-prefix "cluster" \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 ## Networking Stack - CFN Network Template<a name="networking"></a>
 
@@ -139,6 +140,8 @@ aws cloudformation deploy \
 ```
 ![Networking Diagram](images/networking-diagram.png)
 
+[TOP](#top)
+
 ## RDS Stack - CFN RDS DB Template<a name="db"></a>
 
 We created *cluster* directory *aws/cfn/db* for the *config.toml* and the *template.yaml* files
@@ -170,6 +173,7 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS MasterUserPassword=$DB_PASSWORD \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 ## Service Stack - CFN Backend Stack Template<a name="service"></a>
 
@@ -203,6 +207,7 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 ## Frontend Stack - CFN Frontend Template<a name="frontend"></a>
 
@@ -236,6 +241,7 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 ## CI/CD - CFN CI/CD Template<a name="cicd"></a>
 
@@ -280,12 +286,14 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 Run the CI/CD pipeline successfully in Code Pipeline. See screenshot
 
 ![CI/CD Pipeline Created](images/pipeline-created.png)
 
 ![CI/CD Pipeline](images/cicd.png)
+[TOP](#top)
 
 
 ## Sync Stack - CFN Cluster Template<a name="sync"></a>
@@ -320,6 +328,7 @@ aws cloudformation deploy \
   --parameter-overrides $PARAMETERS \
   --capabilities CAPABILITY_NAMED_IAM
 ```
+[TOP](#top)
 
 ## CloudFormation Stacks Successfully Created
 
@@ -357,6 +366,7 @@ Wrote a Cruddur today
 ![Upload/change profile avatar](images/submitted-cruddur-today.png)
 
 ![Cruddur Messages](images/cruddur-messages.png)
+[TOP](#top)
 
 ## CORS<a name="cors"></a>
 
@@ -365,5 +375,6 @@ This was for me the most challenging part (after DynamoDB). I managed to get the
 ![CORS Settings in API Gateway](images/CORS-APIGW.png)
 
 ![CORS in Lambda](images/CORS-Lambda.png)
+[TOP](#top)
 
 
