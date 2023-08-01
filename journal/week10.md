@@ -2,16 +2,16 @@
 
 ## Note to Andrew
 
-I've been trying to work with Gitpod but for the last few weeks and for some unknown reasons I'm wasn't and still not able to connect to AWS despite hundreds of attempts. I also tried to issue new keys but no success. Had several tickets raised to the support team at Gitpod and through their discord channel chats but this produced no success. So everything here is based on memory, going through the videos again as much as I could and also looking at other peoples journals (not copying/cheatin or plagiarising  - everything here is my own work and words).
+I've been trying to work with Gitpod for the last few weeks but for some unknown reasons I wasn't and still am not able to connect to AWS despite hundreds of attempts. I also tried to issue new keys without success. Had several tickets raised to the support team at Gitpod and also through their discord channel chats but this produced no success. So everything here is based on memory, going through the videos again as much as I could and also looking at other peoples journals (not copying/cheating or plagiarising  - everything here is my own work and words).
 In particular I consulted the following bootcampers repos which I found useful to get an idea on how to write a journal entry:
 
 https://github.com/beiciliang/aws-bootcamp-cruddur-2023/blob/main/journal/week10.md and 
 https://github.com/Rietta1/aws-bootcamp-cruddur-2023/blob/main/journal/week10.md
 
 Unfortunately due to the above I wasn't able to carry out further implementation of some of the functionality nor I could carry out debugging of the frontend. Please take this into account. 
-I realised though in the last few days that the work around would have been to manually download the images from AWS and upload them Gitpod but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time with trying to figure out the problem stopping me with everything else. I had a go with Jumppad as you recommended it, installed but the learningcurve to use it in the same way as Gitpod made me decide to learn it at a later stage as I wouldn't have had the time to submit.
+I realised though in the last few days that the workaround would have been to manually download the images from AWS and upload them Gitpod and back to AWS again after further development but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time trying to figure out the problem stopping me with everything else. I had a go with Jumppad as you recommended, I've installed it but the learning curve to use it in the same way as I did Gitpod made me decide to learn it at a later stage as I wouldn't have had the time to submit.
 
-When I try to login to ECR I always get:
+This is the error I get when I try to login to ECR I always get:
 
 ```html
 gitpod /workspace/aws-bootcamp-cruddur-2023 (main) $ ./bin/ecr/login 
