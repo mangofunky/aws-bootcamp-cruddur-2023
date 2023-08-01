@@ -62,6 +62,14 @@ Full diagram available [here](https://drive.google.com/file/d/1RVzjeaFi76a1buCIZ
 
 * [Sync Stack](#sync)
 
+* [CFN Lint, CFN Toml and CFN Guard](#lint)
+
+* [Frontend Static Web Hosting](#frontend)
+
+* [Clean Up](#cleanup)
+
+* [CORS Challenge](#cors)
+
 ## Cluster - CFN Cluster Template<a name="cluster"></a> 
 
 We created *cluster* directory *aws/cfn/cluster* for the *config.toml* and the *template.yaml* files
@@ -317,7 +325,7 @@ aws cloudformation deploy \
 
 ![CloudFormation Stacks Created](images/cfn.png)
 
-## CFN Lint and CFN Guard
+## CFN Lint, CFN Toml and CFN Guard<a name="lint"></a>
 
 Run the following command (inserted in .gitpod.yml file) to add linting support on Gitpod and to validate cloud environments and 
 
@@ -329,7 +337,7 @@ bundle update --bundler
       gem install cfn-toml  
 ```
 
-## Frontend Static Web Hosting
+## Frontend Static Web Hosting<a name="frontend"></a>
 
 Used a tool written in Ruby to be able to sync development on gitpod to AWS S3 bucket for production, but also for when later on we need to make changes to the website and need to update the prod frontend running the following scripts:
 *./bin/frontend/static-build*
@@ -337,7 +345,7 @@ To invalidate the Cloudfront cache another script can be invoked
 *./bin/frontend/sync*
 The latter script needed to have the dotenv gem installed
 
-## Clean Up - Working Prod Cruddur Site Screenshots (up to where I could use Gitpod)
+## Clean Up - Working Prod Cruddur Site Screenshots (up to where I could use Gitpod)<a name="cleanup"></a>
 
 ![Upload/change profile avatar](images/profile-upload.png)
 ![Upload/change profile avatar](images/update-profile.png)
@@ -350,7 +358,7 @@ Wrote a Cruddur today
 
 ![Cruddur Messages](images/cruddur-messages.png)
 
-## CORS
+## CORS<a name="cors"></a>
 
 This was for me the most challenging part (after DynamoDB). I managed to get the CORS to work by clearing the CORS in the API GW console as per screenshot below and only leaving them in the Lambda Function but it took so much trial and error to get there.
 
