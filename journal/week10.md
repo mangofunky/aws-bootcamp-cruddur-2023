@@ -38,7 +38,7 @@ and with no chance to get access to the logs
 
 ***
 
-In this week we worked on CI/CD Pipeline using AWS Cloudformation
+In this week we worked on building various stack layers integrating with a CI/CD Pipeline and using AWS Cloudformation
 
 ## Cruddur Stack
 
