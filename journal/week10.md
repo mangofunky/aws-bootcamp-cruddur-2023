@@ -10,7 +10,7 @@ https://github.com/beiciliang/aws-bootcamp-cruddur-2023/blob/main/journal/week10
 https://github.com/Rietta1/aws-bootcamp-cruddur-2023/blob/main/journal/week10.md
 
 Unfortunately due to the above I wasn't able to carry out further implementation of some of the functionality nor I could carry out debugging of the frontend. Please take this into account. 
-I realised though in the last few days that the workaround would have been to manually download the images from AWS and upload them Gitpod and back to AWS again after further development but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time trying to figure out the problem stopping me with everything else. I had a go with Jumppad as you recommended, I've installed it but the learning curve to use it in the same way as I did Gitpod made me decide to learn it at a later stage as I wouldn't have had the time to submit.
+I realised though in the last few days that the workaround would have been to manually download the images from AWS and upload them to Gitpod and then back to AWS again after further development but this come to my mind too late to get on with it which is a shame! By this time I wasted so much time trying to figure out the problem stopping me with everything else. I had a go with Jumppad as you recommended, I've installed it but the learning curve to use it in the same way as I did Gitpod made me decide to learn it at a later stage as I wouldn't have had the time to submit.
 
 This is the error I get when I try to login to ECR I always get:
 
