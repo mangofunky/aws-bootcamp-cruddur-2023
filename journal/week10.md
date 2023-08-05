@@ -301,7 +301,7 @@ Run the CI/CD pipeline successfully in Code Pipeline. See screenshot
 
 We created *cluster* directory *aws/cfn/sync* for the *config.toml* and the *template.yaml* files
 
-Run *./bin/cfn/service* command to generate the *CrdSyncRole* stack for syncing roles
+Run *./bin/cfn/service* command to generate the *CrdSyncRole* stack for syncing the forntend static site when changed/updated.
 
 ```bash
 #! /usr/bin/env bash
