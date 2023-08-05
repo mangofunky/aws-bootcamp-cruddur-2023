@@ -111,7 +111,7 @@ We created the networking directory *aws/cfn/networking* with the *config.toml* 
 
 Run *./bin/cfn/networking* command to generate the *CrdNet* stack
 
-The template creates a /16 CIDR VPC with 6 subnets for each private and public, IGW and RT, RT associations and Outputs to be used by other CFN templates and can be seen [here](aws/cfn/networking/template.yaml)
+The template creates a /16 CIDR VPC with 6 subnets with /24 CIDR range for each private and public (though the private subnets we ended up not using), IGW and RT, RT associations and Outputs to be used by other CFN templates and can be seen [here](aws/cfn/networking/template.yaml)
 
 I run the following command *./bin/cfn/networking* to create the *CrdNet* stack
 
